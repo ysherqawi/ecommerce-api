@@ -4,13 +4,16 @@ const colors = require('colors');
 
 const app = express();
 
+// Load env var
 dotenv.config({ path: './config/.env' });
 
-require('./startup/db')();
+// Mount routes
+require('./startup/routes')(app);
 
-app.get('/', (req, res) => res.send('Hello World!'));
+// Connect to DB
+require('./startup/db')();
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
-  console.log(`Server Running on Port ${PORT}`.green.underline);
+  console.log(`Server Running on Port ${PORT}`.yellow);
 });
