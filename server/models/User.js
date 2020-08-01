@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
 
 const userSchema = new mongoose.Schema(
   {
@@ -25,6 +26,7 @@ const userSchema = new mongoose.Schema(
       trim: true,
       required: [true, 'Please add a password'],
       minlength: [8, 'Password should be atleast 8 characters'],
+      select: false,
     },
     about: {
       type: String,
@@ -43,17 +45,17 @@ const userSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-userSchema.methods.toJSON = function () {
-  const user = this;
-  const userObject = user.toObject();
-
-  delete userObject.password;
-
-  return userObject;
-};
-
 userSchema.methods.matchPassword = async function (plainePassword) {
   return await bcrypt.compare(plainePassword, this.password);
+};
+
+//Sign JWT and return
+userSchema.methods.generateAuthToken = function () {
+  const user = this;
+  const token = jwt.sign({ id: user._id.toString() }, process.env.JWT_SECRET, {
+    expiresIn: process.env.JWT_EXPIRE,
+  });
+  return token;
 };
 
 userSchema.pre('save', async function (next) {
