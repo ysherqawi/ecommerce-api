@@ -34,8 +34,9 @@ const userSchema = new mongoose.Schema(
       maxlength: [350, 'About should be less than 350 characters'],
     },
     role: {
-      type: Number,
-      default: 0,
+      type: String,
+      enum: ['user', 'admin'],
+      default: 'user',
     },
     history: {
       type: Array,
