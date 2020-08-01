@@ -4,7 +4,7 @@ const ErrorResponse = require('../utils/errorResponse');
 // @desc    Register user
 // @route   POST /api/v1/auth/register
 // @access  Public
-exports.register = async (req, res) => {
+exports.register = async (req, res, next) => {
   const user = await User.create(req.body);
 
   await user.save();
@@ -35,10 +35,33 @@ exports.login = async (req, res, next) => {
   sendResponseToken(user, res, 200);
 };
 
+// @desc    Get current logged in user
+// @route   GET /api/v1/auth/me
+// @access  Private
+exports.getMe = async (req, res, next) => {
+  res.status(200).json({
+    success: true,
+    user: req.user,
+  });
+};
+
+// @desc    Log user out /clear cookie
+// @route   GET /api/v1/auth/logout
+// @access  Private
+exports.logout = async (req, res, next) => {
+  res.cookie('token', 'none', {
+    expires: new Date(Date.now() + 10 * 1000),
+    httpOnly: true,
+  });
+
+  res.status(200).json({
+    success: true,
+  });
+};
+
 //Get token from model, create cookie and send response
 const sendResponseToken = (user, res, statusCode) => {
   const token = user.generateAuthToken();
-  console.log(token);
   const options = {
     //Expires after 30 days
     expires: new Date(

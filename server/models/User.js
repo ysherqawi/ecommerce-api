@@ -52,7 +52,7 @@ userSchema.methods.matchPassword = async function (plainePassword) {
 //Sign JWT and return
 userSchema.methods.generateAuthToken = function () {
   const user = this;
-  const token = jwt.sign({ id: user._id.toString() }, process.env.JWT_SECRET, {
+  const token = jwt.sign({ _id: user._id.toString() }, process.env.JWT_SECRET, {
     expiresIn: process.env.JWT_EXPIRE,
   });
   return token;
