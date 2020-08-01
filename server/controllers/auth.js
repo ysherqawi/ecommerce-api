@@ -8,7 +8,5 @@ exports.register = async (req, res) => {
 
   await user.save();
 
-  res.status(201).json({
-    user,
-  });
+  res.status(201).json({ sucess: true, user });
 };
