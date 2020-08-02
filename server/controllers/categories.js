@@ -15,6 +15,14 @@ exports.categoryById = async (req, res, next, id) => {
   next();
 };
 
+// @desc    Get all categries
+// @route   GET /api/v1/categories
+// @access  Public
+exports.getCategories = async (req, res, next) => {
+  const categories = await Category.find();
+  res.status(200).json({ success: true, data: categories });
+};
+
 // @desc    Create category
 // @route   POST /api/v1/categories
 // @access  Private / admin
@@ -26,7 +34,7 @@ exports.addCategory = async (req, res, next) => {
 };
 
 // @desc    Get single category
-// @route   POST /api/v1/categories/:id
+// @route   GET /api/v1/categories/:id
 // @access  Public
 exports.getCategory = async (req, res, next) => {
   res.status(200).json({ success: true, data: req.category });

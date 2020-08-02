@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 
 const {
+  getCategories,
   addCategory,
   getCategory,
   categoryById,
@@ -9,7 +10,10 @@ const {
 
 const { protect, authorize } = require('../middleware/auth');
 
-router.route('/').post(protect, authorize('admin'), addCategory);
+router
+  .route('/')
+  .get(getCategories)
+  .post(protect, authorize('admin'), addCategory);
 
 router.route('/:id').get(getCategory);
 
