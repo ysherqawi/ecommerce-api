@@ -2,7 +2,7 @@ const Category = require('../models/Category');
 const ErrorResponse = require('../utils/errorResponse');
 
 // @desc    Create category
-// @route   POST /api/v1/auth/category
+// @route   POST /api/v1/categories
 // @access  Private / admin
 exports.addCategory = async (req, res, next) => {
   const category = await Category.create(req.body);

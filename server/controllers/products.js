@@ -5,7 +5,7 @@ const Product = require('../models/Product');
 const ErrorResponse = require('../utils/errorResponse');
 
 // @desc    Create product
-// @route   POST /api/v1/auth/products
+// @route   POST /api/v1/products
 // @access  Private / admin
 exports.addProduct = (req, res, next) => {
   const form = new formidable.IncomingForm();
@@ -34,4 +34,18 @@ exports.addProduct = (req, res, next) => {
       res.status(201).json({ success: true, data: result });
     });
   });
+};
+
+// @desc    Get single product
+// @route   GET /api/v1/products/:id
+// @access  Private / admin
+exports.getProduct = async (req, res, next) => {
+  const product = await Product.findById(req.params.id);
+
+  if (!product)
+    return next(
+      new ErrorResponse(`No Product found with the id of ${req.params.id}`, 404)
+    );
+
+  res.status(200).json({ success: true, data: product });
 };
