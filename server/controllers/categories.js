@@ -1,8 +1,8 @@
 const Category = require('../models/Category');
 const ErrorResponse = require('../utils/errorResponse');
 
-// @desc    productById middleware
-// run whenever an id param found in the route and populate the product in the req
+// @desc    categoryById middleware
+// run whenever an id param found in the route and populate the category in the req
 exports.categoryById = async (req, res, next, id) => {
   const category = await Category.findById(id);
 
