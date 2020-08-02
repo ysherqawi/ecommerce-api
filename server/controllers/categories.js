@@ -39,3 +39,20 @@ exports.addCategory = async (req, res, next) => {
 exports.getCategory = async (req, res, next) => {
   res.status(200).json({ success: true, data: req.category });
 };
+
+// @desc    Update category
+// @route   PUT /api/v1/categories/:id
+// @access  Private / admin
+exports.updateCategory = async (req, res, next) => {
+  const category = req.category;
+  await category.update(req.body, { runValidators: true, new: true });
+
+  res.status(200).json({ success: true, data: category });
+};
+// @desc    Delete category
+// @route   DELETE /api/v1/categories/:id
+// @access  Private / admin
+exports.deleteCategory = async (req, res, next) => {
+  await req.category.remove();
+  res.status(200).json({ success: true, data: {} });
+};
