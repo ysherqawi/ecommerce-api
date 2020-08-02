@@ -4,6 +4,20 @@ const _ = require('lodash');
 const Product = require('../models/Product');
 const ErrorResponse = require('../utils/errorResponse');
 
+// @desc    productById middleware
+// run whenever an id param found in the route and populate the product in the req
+exports.productById = async (req, res, next, id) => {
+  const product = await Product.findById(id);
+
+  if (!product)
+    return next(
+      new ErrorResponse(`No Product found with the id of ${req.params.id}`, 404)
+    );
+
+  req.product = product;
+  next();
+};
+
 // @desc    Create product
 // @route   POST /api/v1/products
 // @access  Private / admin
@@ -38,14 +52,49 @@ exports.addProduct = (req, res, next) => {
 
 // @desc    Get single product
 // @route   GET /api/v1/products/:id
-// @access  Private / admin
+// @access  Public
 exports.getProduct = async (req, res, next) => {
-  const product = await Product.findById(req.params.id);
+  res.status(200).json({ success: true, data: req.product });
+};
 
-  if (!product)
-    return next(
-      new ErrorResponse(`No Product found with the id of ${req.params.id}`, 404)
-    );
+// @desc    Update  product
+// @route   PUT /api/v1/products/:id
+// @access  Private / admin
+exports.updateProduct = async (req, res, next) => {
+  const form = new formidable.IncomingForm();
+  form.keepExtensions = true;
 
-  res.status(200).json({ success: true, data: product });
+  form.parse(req, (err, fields, files) => {
+    if (err) return next(new ErrorResponse('Image could not be uploaded', 400));
+
+    let product = req.product;
+    product = _.extend(product, fields);
+
+    if (files.photo) {
+      if (!files.photo.type.startsWith('image'))
+        return next(new ErrorResponse('Please upload Image file', 400));
+
+      if (files.photo.size > 1000000)
+        return next(
+          new ErrorResponse('Image size should not be greater than 1MB', 400)
+        );
+
+      product.photo.data = fs.readFileSync(files.photo.path);
+      product.photo.contentType = files.photo.type;
+    }
+
+    product.save((err, result) => {
+      if (err) return next(err);
+      res.status(200).json({ success: true, data: result });
+    });
+  });
+};
+
+// @desc    Delete  product
+// @route   DELETE /api/v1/products/:id
+// @access  Private / admin
+exports.deleteProduct = async (req, res, next) => {
+  await req.product.remove();
+
+  res.status(200).json({ success: true, data: {} });
 };
