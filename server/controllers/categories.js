@@ -1,20 +1,17 @@
 const Category = require('../models/Category');
 const ErrorResponse = require('../utils/errorResponse');
 
-// @desc    categoryById middleware
-// run whenever an id param found in the route and populate the category in the req
+// @desc    productById middleware
+// run whenever an id param found in the route and populate the product in the req
 exports.categoryById = async (req, res, next, id) => {
   const category = await Category.findById(id);
 
   if (!category)
     return next(
-      new ErrorResponse(
-        `No Category found with the id of ${req.params.id}`,
-        404
-      )
+      new ErrorResponse(`No Category found with the id of ${id}`, 404)
     );
-  req.category = category;
 
+  req.category = category;
   next();
 };
 
@@ -26,4 +23,11 @@ exports.addCategory = async (req, res, next) => {
   await category.save();
 
   res.status(201).json({ success: true, data: category });
+};
+
+// @desc    Get single category
+// @route   POST /api/v1/categories/:id
+// @access  Public
+exports.getCategory = async (req, res, next) => {
+  res.status(200).json({ success: true, data: req.category });
 };

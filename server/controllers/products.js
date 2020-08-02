@@ -11,7 +11,7 @@ exports.productById = async (req, res, next, id) => {
 
   if (!product)
     return next(
-      new ErrorResponse(`No Product found with the id of ${req.params.id}`, 404)
+      new ErrorResponse(`No Product found with the id of ${id}`, 404)
     );
 
   req.product = product;
