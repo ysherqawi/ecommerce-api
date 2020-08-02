@@ -1,5 +1,6 @@
 const Category = require('../models/Category');
 const ErrorResponse = require('../utils/errorResponse');
+const { findByIdAndUpdate } = require('../models/Category');
 
 // @desc    categoryById middleware
 // run whenever an id param found in the route and populate the category in the req
@@ -44,9 +45,11 @@ exports.getCategory = async (req, res, next) => {
 // @route   PUT /api/v1/categories/:id
 // @access  Private / admin
 exports.updateCategory = async (req, res, next) => {
-  const category = req.category;
-  await category.update(req.body, { runValidators: true, new: true });
-
+  let category = req.category;
+  category = await Category.findByIdAndUpdate(req.params.id, req.body, {
+    runValidators: true,
+    new: true,
+  });
   res.status(200).json({ success: true, data: category });
 };
 // @desc    Delete category
