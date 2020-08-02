@@ -30,6 +30,10 @@ const productSchema = new mongoose.Schema(
       required: [true, 'Please add a quantity value'],
       min: [1, 'quantity should be greater than 0'],
     },
+    sold: {
+      type: Number,
+      default: 0,
+    },
     photo: {
       data: Buffer,
       contentType: String,
