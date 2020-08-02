@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 
 const {
+  getProducts,
   addProduct,
   getProduct,
   updateProduct,
@@ -11,7 +12,10 @@ const {
 
 const { protect, authorize } = require('../middleware/auth');
 
-router.route('/').post(protect, authorize('admin'), addProduct);
+router
+  .route('/')
+  .get(getProducts)
+  .post(protect, authorize('admin'), addProduct);
 
 router
   .route('/:id')

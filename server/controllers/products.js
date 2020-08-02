@@ -18,6 +18,27 @@ exports.productById = async (req, res, next, id) => {
   next();
 };
 
+// @desc    Get all product
+// @route   GET /api/v1/products
+// @access  Public
+exports.getProducts = async (req, res, next) => {
+  const order = req.query.order || 'asc';
+  const sortBy = req.query.sortBy || '_id';
+  const limit = parseInt(req.query.limit) || 6;
+  const skip = parseInt(req.query.skip) || 0;
+
+  const products = await Product.find()
+    //.select('-photo')
+    .populate('category')
+    .sort([[sortBy, order]])
+    .limit(limit)
+    .skip(skip);
+
+  res
+    .status(200)
+    .json({ success: true, count: products.length, data: products });
+};
+
 // @desc    Create product
 // @route   POST /api/v1/products
 // @access  Private / admin
