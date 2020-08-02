@@ -27,6 +27,8 @@ const productSchema = new mongoose.Schema(
     },
     quantity: {
       type: Number,
+      required: [true, 'Please add a quantity value'],
+      min: [1, 'quantity should be greater than 0'],
     },
     photo: {
       data: Buffer,
@@ -34,10 +36,19 @@ const productSchema = new mongoose.Schema(
     },
     shipping: {
       type: Boolean,
-      required: false,
+      required: [true, 'Please add a shipping option'],
     },
   },
   { timestamps: true }
 );
+
+productSchema.methods.toJSON = function () {
+  const product = this;
+  const userObject = product.toObject();
+
+  delete userObject.photo;
+
+  return userObject;
+};
 
 module.exports = mongoose.model('Product', productSchema);
