@@ -45,6 +45,41 @@ exports.getMe = async (req, res, next) => {
   });
 };
 
+// @desc    Update user details
+// @route   PUT /api/v1/auth/updatedetails
+// @access  Private
+exports.updateDetails = async (req, res, next) => {
+  const updateFields = {
+    name: req.body.name,
+    email: req.body.email,
+  };
+
+  const user = await User.findByIdAndUpdate(req.user._id, updateFields, {
+    new: true,
+    runValidators: true,
+  });
+
+  res.status(200).json({
+    success: true,
+    data: user,
+  });
+};
+
+// @desc    Update user password
+// @route   PUT /api/v1/auth/updatepassword
+// @access  Private
+exports.updatePassword = async (req, res, next) => {
+  const user = await User.findById(req.user._id).select('+password');
+
+  const isMatched = await user.matchPassword(req.body.currentPassword);
+  if (!isMatched) return next(new ErrorResponse('Incorrect password', 400));
+
+  user.password = req.body.newPassword;
+  await user.save();
+
+  sendResponseToken(user, res, 200);
+};
+
 // @desc    Log user out /clear cookie
 // @route   GET /api/v1/auth/logout
 // @access  Private
