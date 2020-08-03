@@ -194,7 +194,7 @@ exports.getProductPhoto = async (req, res, next) => {
   if (!req.product.photo.data) {
     return next(new ErrorResponse('Image could not be found', 404));
   }
-  res.set('Content-Type', req.product.photo.data.contentType);
+  res.set('Content-Type', req.product.photo.contentType);
   res.send(req.product.photo.data);
   next();
 };
