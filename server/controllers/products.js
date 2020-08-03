@@ -25,14 +25,14 @@ exports.getProducts = async (req, res, next) => {
   const order = req.query.order || 'asc';
   const sortBy = req.query.sortBy || '_id';
   const limit = parseInt(req.query.limit) || 6;
-  const skip = parseInt(req.query.skip) || 0;
+  // const skip = parseInt(req.query.skip) || 0;
 
   const products = await Product.find()
-    //.select('-photo')
+    .select('-photo')
     .populate('category')
     .sort([[sortBy, order]])
-    .limit(limit)
-    .skip(skip);
+    .limit(limit);
+  // .skip(skip);
 
   res
     .status(200)
@@ -142,4 +142,47 @@ exports.getRelatedProducts = async (req, res, next) => {
 exports.getProductsCategories = async (req, res, next) => {
   const categories = await Product.distinct('category');
   res.status(200).json({ success: true, data: categories });
+};
+
+/**
+ * list products by search
+ * we will implement product search in react frontend
+ * we will show categories in checkbox and price range in radio buttons
+ * as the user clicks on those checkbox and radio buttons
+ * we will make api request and show the products to users based on what he wants
+ */
+
+// @desc    Get products by search
+// @route   POST /api/v1/products/by/search
+// @access  Public
+exports.getProductsBySearch = async (req, res, next) => {
+  const order = req.body.order || 'desc';
+  const sortBy = req.body.sortBy || '_id';
+  const limit = parseInt(req.body.limit) || 100;
+  const skip = parseInt(req.body.skip);
+  const findArgs = {};
+
+  for (let key in req.body.filters) {
+    if (req.body.filters[key].length > 0) {
+      if (key === 'price')
+        // gte -  greater than price [0-10]
+        // lte - less than
+        findArgs[key] = {
+          $gte: req.body.filters[key][0],
+          $lte: req.body.filters[key][1],
+        };
+      else findArgs[key] = req.body.filters[key];
+    }
+  }
+
+  const products = await Product.find(findArgs)
+    .select('-photo')
+    .populate('category')
+    .sort([[sortBy, order]])
+    .skip(skip)
+    .limit(limit);
+
+  res
+    .status(200)
+    .json({ success: true, count: products.length, data: products });
 };

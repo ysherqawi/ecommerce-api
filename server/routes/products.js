@@ -10,6 +10,7 @@ const {
   productById,
   getRelatedProducts,
   getProductsCategories,
+  getProductsBySearch,
 } = require('../controllers/products');
 
 const { protect, authorize } = require('../middleware/auth');
@@ -20,6 +21,8 @@ router
   .post(protect, authorize('admin'), addProduct);
 
 router.route('/categories').get(getProductsCategories);
+
+router.route('/by/search').post(getProductsBySearch);
 
 router
   .route('/:id')
