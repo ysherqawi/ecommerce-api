@@ -190,7 +190,7 @@ exports.getProductsBySearch = async (req, res, next) => {
 // @desc    Get products photo
 // @route   GET /api/v1/products/:id/photo
 // @access  Public
-exports.getProductPhoto = async (req, res, next) => {
+exports.getProductPhoto = (req, res, next) => {
   if (!req.product.photo.data) {
     return next(new ErrorResponse('Image could not be found', 404));
   }
