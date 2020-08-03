@@ -11,6 +11,7 @@ const {
   getRelatedProducts,
   getProductsCategories,
   getProductsBySearch,
+  getProductPhoto,
 } = require('../controllers/products');
 
 const { protect, authorize } = require('../middleware/auth');
@@ -29,6 +30,8 @@ router
   .get(getProduct)
   .put(protect, authorize('admin'), updateProduct)
   .delete(protect, authorize('admin'), deleteProduct);
+
+router.route('/photo/:id').get(getProductPhoto);
 
 router.route('/related/:id').get(getRelatedProducts);
 

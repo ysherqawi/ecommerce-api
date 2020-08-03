@@ -186,3 +186,15 @@ exports.getProductsBySearch = async (req, res, next) => {
     .status(200)
     .json({ success: true, count: products.length, data: products });
 };
+
+// @desc    Get products photo
+// @route   GET /api/v1/products/:id/photo
+// @access  Public
+exports.getProductPhoto = async (req, res, next) => {
+  if (!req.product.photo.data) {
+    return next(new ErrorResponse('Image could not be found', 404));
+  }
+  res.set('Content-Type', req.product.photo.data.contentType);
+  res.send(req.product.photo.data);
+  next();
+};
