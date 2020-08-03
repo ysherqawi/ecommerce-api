@@ -8,6 +8,7 @@ const {
   updateProduct,
   deleteProduct,
   productById,
+  getRelatedProducts,
 } = require('../controllers/products');
 
 const { protect, authorize } = require('../middleware/auth');
@@ -22,6 +23,8 @@ router
   .get(getProduct)
   .put(protect, authorize('admin'), updateProduct)
   .delete(protect, authorize('admin'), deleteProduct);
+
+router.route('/related/:id').get(getRelatedProducts);
 
 router.param('id', productById);
 

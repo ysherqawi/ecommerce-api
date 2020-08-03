@@ -119,3 +119,19 @@ exports.deleteProduct = async (req, res, next) => {
 
   res.status(200).json({ success: true, data: {} });
 };
+
+// @desc    Get related products
+// @route   GET /api/v1/products/related/:id
+// @access  Public
+exports.getRelatedProducts = async (req, res, next) => {
+  const limit = parseInt(req.query.limit) || 6;
+  const products = await Product.find({
+    _id: { $ne: req.product },
+    category: req.product.category,
+  })
+    .populate('category', '_id name')
+    .limit(limit);
+  res
+    .status(200)
+    .json({ success: true, count: products.length, data: products });
+};
