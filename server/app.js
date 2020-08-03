@@ -4,7 +4,7 @@ const morgan = require('morgan');
 const dotenv = require('dotenv');
 const colors = require('colors');
 const cookieParser = require('cookie-parser');
-
+const cors = require('cors');
 const app = express();
 
 // Load env var
@@ -18,6 +18,9 @@ app.use(express.json());
 
 // Cookie Parser
 app.use(cookieParser());
+
+//Enable CORS
+app.use(cors());
 
 // Mount routes
 require('./startup/routes')(app);
