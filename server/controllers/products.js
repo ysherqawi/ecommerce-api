@@ -135,3 +135,11 @@ exports.getRelatedProducts = async (req, res, next) => {
     .status(200)
     .json({ success: true, count: products.length, data: products });
 };
+
+// @desc    Get products categories
+// @route   GET /api/v1/products/categories
+// @access  Public
+exports.getProductsCategories = async (req, res, next) => {
+  const categories = await Product.distinct('category');
+  res.status(200).json({ success: true, data: categories });
+};
