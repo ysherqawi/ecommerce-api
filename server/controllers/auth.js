@@ -94,6 +94,21 @@ exports.logout = async (req, res, next) => {
   });
 };
 
+// @desc    Forgot password
+// @route   POST /api/v1/auth/forgotpassword
+// @access  Public
+exports.forgotPassword = async (req, res, next) => {
+  const user = await User.findOne({ email: req.body.email });
+  if (!user)
+    return next(new ErrorResponse('There is no user with that email', 404));
+
+  // Get reset token
+  const resetToken = user.getResetPasswordToken();
+
+  await user.save({ validateBeforeSave: false });
+  res.send({ user });
+};
+
 //Get token from model, create cookie and send response
 const sendResponseToken = (user, res, statusCode) => {
   const token = user.generateAuthToken();
