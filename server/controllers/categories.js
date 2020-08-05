@@ -1,6 +1,5 @@
 const Category = require('../models/Category');
 const ErrorResponse = require('../utils/errorResponse');
-const { findByIdAndUpdate } = require('../models/Category');
 
 // @desc    categoryById middleware
 // run whenever an id param found in the route and populate the category in the req
