@@ -1,4 +1,7 @@
 const express = require('express');
+
+const User = require('../models/User');
+
 const {
   getUsers,
   getUser,
@@ -8,13 +11,14 @@ const {
 } = require('../controllers/users');
 
 const { protect, authorize } = require('../middleware/auth');
+const advancedResults = require('../middleware/advancedResults');
 
 const router = express.Router();
 
 router.use(protect);
 router.use(authorize('admin'));
 
-router.route('/').get(getUsers).post(createUser);
+router.route('/').get(advancedResults(User), getUsers).post(createUser);
 
 router.route('/:id').get(getUser).put(updateUser).delete(deleteUser);
 

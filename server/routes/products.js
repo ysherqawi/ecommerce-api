@@ -1,6 +1,8 @@
 const express = require('express');
 const router = express.Router();
 
+const Product = require('../models/Product');
+
 const {
   getProducts,
   addProduct,
@@ -10,23 +12,18 @@ const {
   productById,
   getRelatedProducts,
   getProductsCategories,
-  getProductsByFilter,
   getProductPhoto,
-  searchProducts,
 } = require('../controllers/products');
 
+const advancedResults = require('../middleware/advancedResults');
 const { protect, authorize } = require('../middleware/auth');
 
 router
   .route('/')
-  .get(getProducts)
+  .get(advancedResults(Product, 'category'), getProducts)
   .post(protect, authorize('admin'), addProduct);
 
 router.route('/categories').get(getProductsCategories);
-
-router.route('/by/filter').post(getProductsByFilter);
-
-router.route('/searchproducts').get(searchProducts);
 
 router
   .route('/:id')
