@@ -152,10 +152,10 @@ exports.getProductsCategories = async (req, res, next) => {
  * we will make api request and show the products to users based on what he wants
  */
 
-// @desc    Get products by search
-// @route   POST /api/v1/products/by/search
+// @desc    Get products by filtering
+// @route   POST /api/v1/products/by/filter
 // @access  Public
-exports.getProductsBySearch = async (req, res, next) => {
+exports.getProductsByFilter = async (req, res, next) => {
   const order = req.body.order || 'desc';
   const sortBy = req.body.sortBy || '_id';
   const limit = parseInt(req.body.limit) || 100;
@@ -197,4 +197,27 @@ exports.getProductPhoto = (req, res, next) => {
   res.set('Content-Type', req.product.photo.contentType);
   res.send(req.product.photo.data);
   next();
+};
+
+// @desc    Search products
+// @route   GET /api/v1/products/search
+// @access  Public
+exports.searchProducts = async (req, res, next) => {
+  // Create query object to hold search value and category value
+  const query = {};
+  // Assign search value to query.name
+  if (req.query.search)
+    query.name = { $regex: req.query.search, $options: 'i' };
+  // Assigne category value to query.category
+
+  if (req.query.category && req.query.category != 'All')
+    query.category = req.query.category;
+
+  console.log(query);
+  // find the product based on query object with 2 properties
+  // search and category (category id send from front end as category)
+  const products = await Product.find(query).select('-photo');
+  res
+    .status(200)
+    .json({ success: true, count: products.length, data: products });
 };

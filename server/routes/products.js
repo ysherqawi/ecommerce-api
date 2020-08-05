@@ -10,8 +10,9 @@ const {
   productById,
   getRelatedProducts,
   getProductsCategories,
-  getProductsBySearch,
+  getProductsByFilter,
   getProductPhoto,
+  searchProducts,
 } = require('../controllers/products');
 
 const { protect, authorize } = require('../middleware/auth');
@@ -23,7 +24,9 @@ router
 
 router.route('/categories').get(getProductsCategories);
 
-router.route('/by/search').post(getProductsBySearch);
+router.route('/by/filter').post(getProductsByFilter);
+
+router.route('/searchproducts').get(searchProducts);
 
 router
   .route('/:id')
