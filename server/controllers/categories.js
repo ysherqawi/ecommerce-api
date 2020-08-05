@@ -20,8 +20,7 @@ exports.categoryById = async (req, res, next, id) => {
 // @route   GET /api/v1/categories
 // @access  Public
 exports.getCategories = async (req, res, next) => {
-  const categories = await Category.find();
-  res.status(200).json({ success: true, data: categories });
+  res.status(200).json(res.advancedResults);
 };
 
 // @desc    Create category
