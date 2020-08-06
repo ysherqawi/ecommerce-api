@@ -23,7 +23,7 @@ exports.createOrder = async (req, res, next) => {
 
   await order.save();
 
-  res.status(201).json({ success: true, order });
+  res.status(201).json({ success: true, data: order });
 };
 
 // @desc    Get orders
@@ -39,7 +39,7 @@ exports.getOrders = async (req, res, next) => {
 exports.getStatusValues = async (req, res, next) => {
   res
     .status(200)
-    .json({ succes: true, status: Order.schema.path('status').enumValues });
+    .json({ success: true, data: Order.schema.path('status').enumValues });
 };
 
 // @desc    Get single order
@@ -59,4 +59,15 @@ exports.updateOrderStatus = async (req, res, next) => {
   await order.save();
 
   res.status(200).json({ success: true, data: req.order });
+};
+
+// @desc    Get user purchase history
+// @route   GET /api/v1/orders/history
+// @access  Private
+exports.getPurchaseHistory = async (req, res, next) => {
+  const history = await Order.find({ user: req.user._id })
+    .populate('user', '_id name')
+    .sort('-created');
+
+  res.status(200).json({ success: true, data: history });
 };

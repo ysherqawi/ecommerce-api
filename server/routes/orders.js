@@ -9,6 +9,7 @@ const {
   orderById,
   getOrder,
   updateOrderStatus,
+  getPurchaseHistory,
 } = require('../controllers/orders');
 
 const { protect, authorize } = require('../middleware/auth');
@@ -31,6 +32,8 @@ router
 router
   .route('/admin/status-values')
   .get(protect, authorize('admin'), getStatusValues);
+
+router.route('/history').get(protect, getPurchaseHistory);
 
 router
   .route('/admin/:id')
