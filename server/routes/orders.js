@@ -7,8 +7,11 @@ const { protect } = require('../middleware/auth');
 
 const {
   addOrderToUserHistory,
-} = require('../middleware/addOrderToUserHistory');
+  decreaseQuantity,
+} = require('../middleware/orders');
 
-router.route('/create').post(protect, addOrderToUserHistory, createOrder);
+router
+  .route('/create')
+  .post(protect, addOrderToUserHistory, decreaseQuantity, createOrder);
 
 module.exports = router;
