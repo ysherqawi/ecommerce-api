@@ -5,6 +5,10 @@ const { createOrder } = require('../controllers/orders');
 
 const { protect } = require('../middleware/auth');
 
-router.route('/create').post(protect, createOrder);
+const {
+  addOrderToUserHistory,
+} = require('../middleware/addOrderToUserHistory');
+
+router.route('/create').post(protect, addOrderToUserHistory, createOrder);
 
 module.exports = router;
