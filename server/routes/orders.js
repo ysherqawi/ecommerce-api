@@ -6,6 +6,9 @@ const {
   createOrder,
   getOrders,
   getStatusValues,
+  orderById,
+  getOrder,
+  updateOrderStatus,
 } = require('../controllers/orders');
 
 const { protect, authorize } = require('../middleware/auth');
@@ -28,4 +31,12 @@ router
 router
   .route('/admin/status-values')
   .get(protect, authorize('admin'), getStatusValues);
+
+router
+  .route('/admin/:id')
+  .get(protect, authorize('admin'), getOrder)
+  .put(protect, authorize('admin'), updateOrderStatus);
+
+router.param('id', orderById);
+
 module.exports = router;
