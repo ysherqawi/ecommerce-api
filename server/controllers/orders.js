@@ -13,3 +13,19 @@ exports.createOrder = async (req, res, next) => {
 
   res.status(201).json({ success: true, order });
 };
+
+// @desc    Get orders
+// @route   GET /api/v1/orders/admin/list
+// @access  Private / Admin
+exports.getOrders = async (req, res, next) => {
+  res.status(200).json(res.advancedResults);
+};
+
+// @desc    Get status values
+// @route   GET /api/v1/orders/admin/status-values
+// @access  Private / Admin
+exports.getStatusValues = async (req, res, next) => {
+  res
+    .status(200)
+    .json({ succes: true, status: Order.schema.path('status').enumValues });
+};
