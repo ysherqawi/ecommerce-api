@@ -4,6 +4,7 @@ const categories = require('../routes/categories');
 const products = require('../routes/products');
 const braintree = require('../routes/braintree');
 const orders = require('../routes/orders');
+const reviews = require('../routes/reviews');
 const errorHandler = require('../middleware/error');
 
 module.exports = function (app) {
@@ -13,5 +14,6 @@ module.exports = function (app) {
   app.use('/api/v1/products', products);
   app.use('/api/v1/braintree', braintree);
   app.use('/api/v1/orders', orders);
+  app.use('/api/v1/reviews', reviews);
   app.use(errorHandler);
 };
