@@ -15,8 +15,14 @@ const {
   getProductPhoto,
 } = require('../controllers/products');
 
+//Include other resource routers
+const reviewRouter = require('./reviews');
+
 const advancedResults = require('../middleware/advancedResults');
 const { protect, authorize } = require('../middleware/auth');
+
+//Re-rout into other resource routers
+router.use('/:productId/reviews', reviewRouter);
 
 router
   .route('/')
