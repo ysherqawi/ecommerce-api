@@ -1,10 +1,10 @@
 require('express-async-errors');
+const path = require('path');
 const express = require('express');
 const morgan = require('morgan');
 const dotenv = require('dotenv');
 const colors = require('colors');
 const cookieParser = require('cookie-parser');
-const cors = require('cors');
 const app = express();
 
 // Load env var
@@ -12,6 +12,9 @@ dotenv.config({ path: './config/.env' });
 
 //Dev logging middleware
 if (process.env.NODE_ENV === 'development') app.use(morgan('dev'));
+
+//Set static folder
+app.use(express.static(path.join(__dirname, 'public')));
 
 // Body parser
 app.use(express.json());
