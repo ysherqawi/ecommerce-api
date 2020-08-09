@@ -66,14 +66,20 @@ exports.updateReview = async (req, res, next) => {
     );
 
   //Make sure review belongs to user or user is admin
-  if ((review.user.toString() !== req.user._id) & (req.user.role !== 'admin'))
+  if (
+    review.user.toString() !== req.user._id.toString() &&
+    req.user.role !== 'admin'
+  ) {
+    console.log(review.user.toString(), req.user._id);
     return next(new ErrorResponse('Not authorized to update this review', 401));
+  }
 
   review = await Review.findByIdAndUpdate(req.params.id, req.body, {
     new: true,
     runValidators: true,
   });
 
+  await review.save();
   res.status(200).json({ success: true, data: review });
 };
 
@@ -89,7 +95,10 @@ exports.deleteReview = async (req, res, next) => {
     );
 
   //Make sure review belongs to user or user is admin
-  if (review.user.toString() !== req.user._id && req.user.role !== 'admin')
+  if (
+    review.user.toString() !== req.user._id.toString() &&
+    req.user.role !== 'admin'
+  )
     return next(new ErrorResponse('Not authorized to update this review', 401));
 
   await review.remove();
