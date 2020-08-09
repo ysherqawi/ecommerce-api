@@ -19,8 +19,8 @@ app.use(express.json());
 // Cookie Parser
 app.use(cookieParser());
 
-//Enable CORS
-app.use(cors());
+//Security middlewares
+require('./startup/security')(app);
 
 // Mount routes
 require('./startup/routes')(app);
