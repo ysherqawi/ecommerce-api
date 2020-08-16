@@ -12,7 +12,7 @@ Go to "config/.env" and update the values/settings to your own
 npm install
 ```
 
-# Run App
+## Run App
 
 ```
 # Run in dev mode
@@ -33,7 +33,7 @@ Extensive documentation with examples [here](https://documenter.getpostman.com/v
 I watched the api creation part from course:
 MERN Stack React Node Ecommerce from Scratch to Deployment
 
-I used what i've learned in previous courses and updated it to use async-await and promises instead of callbacks and write a cleaner code, adding more features like reviews , improve security
+I used what i've learned in previous courses and updated it to use async-await and promises instead of callbacks and write a cleaner code, adding more features like reviews, forgot password, reset password , improve security
 and better folders structures
 
 
